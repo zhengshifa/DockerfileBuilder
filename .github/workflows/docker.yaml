@@ -13,59 +13,23 @@ env:
 
 jobs:
   build:
-    name: Build and Push Docker Image
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - name: Setup Docker Buildx
-      uses: docker/setup-buildx-action@v3
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-    - name: Login to Aliyun Registry
+    - name: Log in to Alibaba Cloud Docker Registry
       run: |
-        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+        docker login ${{ secrets.ALIYUN_REGISTRY }} -u ${{ secrets.ALIYUN_REGISTRY_USER }} --password-stdin
 
-    - name: Get Git Commit Message
-      id: get_commit_message
+    - name: Build Docker image
       run: |
-        # Fetch the latest commit message from the current branch
-        commit_message=$(git log -1 --pretty=%B)
-        # Sanitize the commit message for use as a Docker tag
-        sanitized_commit_message=$(echo "$commit_message" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
-        #echo "COMMIT_MESSAGE=$sanitized_commit_message" >> $GITHUB_ENV
-        echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
+        docker build -t ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAME_SPACE }}/my-app:latest .
 
-    - name: Build Docker Image
+    - name: Push Docker image
       run: |
-        # Ensure Dockerfile is present
-        if [ ! -f Dockerfile ]; then
-          echo "Dockerfile not found!"
-          exit 1
-        fi
-        # Define image name with registry and commit message
-        new_image="${{ env.ALIYUN_REGISTRY }}/${{ env.ALIYUN_NAME_SPACE }}/${{ env.COMMIT_MESSAGE }}"
-
-        # Build the Docker image with the commit message as the tag
-        docker build -t  $new_image .
-        echo "=========================================="
-
-        echo "ALIYUN_REGISTRY: $ALIYUN_REGISTRY"
-        echo "ALIYUN_NAME_SPACE: $ALIYUN_NAME_SPACE"
-        echo "ALIYUN_REGISTRY_USER: $ALIYUN_REGISTRY_USER"
-        echo "ALIYUN_REGISTRY_PASSWORD: $ALIYUN_REGISTRY_PASSWORD"
-        echo "COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}"
-        echo "Docker Image: $new_image"
-        echo "=========================================="
-
-    - name: Tag and Push Docker Image
-      run: |
-        new_image="${{ env.ALIYUN_REGISTRY }}/${{ env.ALIYUN_NAME_SPACE }}/${{ env.COMMIT_MESSAGE }}"
-        # Tag and push the image
-        #docker tag ${{ env.COMMIT_MESSAGE }} $new_image
-        docker push $new_image
-
-        # Clean up local images
-        #docker rmi ${{ env.COMMIT_MESSAGE }}
-        docker rmi  $new_image
+        docker push ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_NAME_SPACE }}/my-app:latest
