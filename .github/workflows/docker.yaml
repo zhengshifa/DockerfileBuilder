@@ -23,9 +23,6 @@ jobs:
     - name: Setup Docker Buildx
       uses: docker/setup-buildx-action@v3
 
-    - name: Print All Environment Variables
-      run: printenv
-      
     - name: Login to Aliyun Registry
       run: |
         docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
@@ -48,6 +45,15 @@ jobs:
 
         # Build the Docker image with the new tag
         docker build -t $new_image .
+        echo "=========================================="
+
+        echo "ALIYUN_REGISTRY: $ALIYUN_REGISTRY"
+        echo "ALIYUN_NAME_SPACE: $ALIYUN_NAME_SPACE"
+        echo "ALIYUN_REGISTRY_USER: $ALIYUN_REGISTRY_USER"
+        echo "ALIYUN_REGISTRY_PASSWORD: $ALIYUN_REGISTRY_PASSWORD"
+        echo "COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}"
+        echo "Docker Image: $new_image"
+        echo "=========================================="
 
     - name: Push Docker Image
       run: |
