@@ -15,6 +15,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      ALIYUN_REGISTRY_USER: 804410011@qq.com
+      ALIYUN_REGISTRY_PASSWORD: tg6jvi@aly
+      ALIYUN_REGISTRY: registry.cn-hangzhou.aliyuncs.com
+      ALIYUN_NAME_SPACE: zhengshifa
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -24,8 +30,8 @@ jobs:
 
     - name: Log in to Alibaba Cloud Docker Registry
       run: |
-        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+        docker login -u ${{ env.ALIYUN_REGISTRY_USER }} -p ${{ env.ALIYUN_REGISTRY_PASSWORD }} ${{ env.ALIYUN_REGISTRY }}
 
-        new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/my-app:latest"
+        new_image=${{ env.ALIYUN_REGISTRY }}/${{ env.ALIYUN_NAME_SPACE }}/my-app:latest
         docker build -t  $new_image .
         docker push $new_image
