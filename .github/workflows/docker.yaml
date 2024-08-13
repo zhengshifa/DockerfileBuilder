@@ -44,17 +44,17 @@ jobs:
         fi
 
         # Build the Docker image with the commit message as the tag
-        docker build -t ${{ env.COMMIT_MESSAGE }} .
+        docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }} .
 
     - name: Tag and Push Docker Image
       run: |
         # Define image name with registry and commit message
-        new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}"
+        #new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}"
 
         # Tag and push the image
-        docker tag ${{ env.COMMIT_MESSAGE }} $new_image
-        docker push $new_image
+        #docker tag ${{ env.COMMIT_MESSAGE }} $new_image
+        docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
 
         # Clean up local images
-        docker rmi ${{ env.COMMIT_MESSAGE }}
-        docker rmi $new_image
+        #docker rmi ${{ env.COMMIT_MESSAGE }}
+        docker rmi $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
