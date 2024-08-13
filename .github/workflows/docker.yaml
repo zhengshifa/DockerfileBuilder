@@ -21,7 +21,14 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v2
-
+    - name: Output environment variables
+      run: |
+        echo "ALIYUN_REGISTRY=${{ secrets.ALIYUN_REGISTRY }}"
+        echo "ALIYUN_NAME_SPACE=${{ secrets.ALIYUN_NAME_SPACE }}"
+        echo "ALIYUN_REGISTRY_USER=${{ secrets.ALIYUN_REGISTRY_USER }}"
+        # Note: Don't output sensitive information like passwords in logs
+        echo "ALIYUN_REGISTRY_PASSWORD=${{ secrets.ALIYUN_REGISTRY_PASSWORD }}"
+        
     - name: Log in to Alibaba Cloud Docker Registry
       run: |
         docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
