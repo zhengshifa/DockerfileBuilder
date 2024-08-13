@@ -25,8 +25,7 @@ jobs:
 
     - name: Login to Aliyun Registry
       run: |
-        echo "${{ secrets.ALIYUN_REGISTRY_PASSWORD }}" | docker login ${{ secrets.ALIYUN_REGISTRY }} -u ${{ secrets.ALIYUN_REGISTRY_USER }} --password-stdin
-
+        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
     - name: Get Git Commit Message
       id: get_commit_message
       run: |
