@@ -1,2 +1,0 @@
-#指定架构
-dreamacro/clash:latest
