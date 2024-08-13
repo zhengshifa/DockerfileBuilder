@@ -45,7 +45,7 @@ jobs:
           exit 1
         fi
         # Define image name with registry and commit message
-        new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}"
+        new_image="${{ env.ALIYUN_REGISTRY }}/${{ env.COMMIT_MESSAGE }}"
 
         # Build the Docker image with the commit message as the tag
         docker build -t  $new_image .
