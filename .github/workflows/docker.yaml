@@ -52,7 +52,7 @@ jobs:
 
     - name: Tag and Push Docker Image
       run: |
-
+        new_image="$ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}"
         # Tag and push the image
         #docker tag ${{ env.COMMIT_MESSAGE }} $new_image
         docker push $new_image
