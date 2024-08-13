@@ -51,5 +51,5 @@ jobs:
       run: |
         # Build and push Docker images for each platform
         for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
-          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}:$PLATFORM . --push
+          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE} . --push
         done
