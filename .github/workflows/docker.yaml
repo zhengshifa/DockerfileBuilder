@@ -30,21 +30,25 @@ jobs:
     - name: Get Git Commit Message
       id: get_commit_message
       run: |
+        # Fetch the latest commit message from the current branch
         commit_message=$(git log -1 --pretty=%B)
+        # Sanitize the commit message for use as a Docker tag
         sanitized_commit_message=$(echo "$commit_message" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
+        #echo "COMMIT_MESSAGE=$sanitized_commit_message" >> $GITHUB_ENV
         echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
 
     - name: Build Docker Image
       run: |
+        # Ensure Dockerfile is present
         if [ ! -f Dockerfile ]; then
           echo "Dockerfile not found!"
           exit 1
         fi
-        # Define the image name and tag
+        # Define image name with registry and commit message
         new_image="${{ env.ALIYUN_REGISTRY }}/${{ env.ALIYUN_NAME_SPACE }}/${{ env.COMMIT_MESSAGE }}"
 
-        # Build the Docker image with the new tag
-        docker build -t $new_image .
+        # Build the Docker image with the commit message as the tag
+        docker build -t  $new_image .
         echo "=========================================="
 
         echo "ALIYUN_REGISTRY: $ALIYUN_REGISTRY"
@@ -55,12 +59,13 @@ jobs:
         echo "Docker Image: $new_image"
         echo "=========================================="
 
-    - name: Push Docker Image
+    - name: Tag and Push Docker Image
       run: |
         new_image="${{ env.ALIYUN_REGISTRY }}/${{ env.ALIYUN_NAME_SPACE }}/${{ env.COMMIT_MESSAGE }}"
-        
-        # Push the Docker image to the registry
+        # Tag and push the image
+        #docker tag ${{ env.COMMIT_MESSAGE }} $new_image
         docker push $new_image
 
         # Clean up local images
-        docker rmi $new_image
+        #docker rmi ${{ env.COMMIT_MESSAGE }}
+        docker rmi  $new_image
