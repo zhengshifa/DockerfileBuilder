@@ -44,6 +44,7 @@ jobs:
         fi
 
         # Build the Docker image with the commit message as the tag
+        echo $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
         docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }} .
 
     - name: Tag and Push Docker Image
