@@ -35,19 +35,21 @@ jobs:
         # Sanitize the commit message for use as a Docker tag
         echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
 
-    - name: Build Docker Image
+    - name: Read Platforms from File
+      id: read_platforms
       run: |
-        # Ensure Dockerfile is present
-        if [ ! -f Dockerfile ]; then
-          echo "Dockerfile not found!"
+        # Read platforms from the 'platforms' file, excluding lines that start with '#'
+        if [ -f platforms ]; then
+          PLATFORMS=$(grep -v '^#' platforms | tr '\n' ',' | sed 's/,$//')
+          echo "PLATFORMS=${PLATFORMS}" >> $GITHUB_ENV
+        else
+          echo "Platform file not found!"
           exit 1
         fi
 
-        # Build the Docker image with the commit message as the tag
-        docker build -t  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }} .
-
-        # Tag and push the image
-        docker push ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }}
-
-        # Clean up local images
-        docker rmi  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }}
+    - name: Build and Push Docker Images
+      run: |
+        # Build and push Docker images for each platform
+        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}:$PLATFORM . --push
+        done
