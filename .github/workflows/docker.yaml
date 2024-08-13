@@ -26,6 +26,7 @@ jobs:
     - name: Login to Aliyun Registry
       run: |
         docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+
     - name: Get Git Commit Message
       id: get_commit_message
       run: |
@@ -33,7 +34,8 @@ jobs:
         commit_message=$(git log -1 --pretty=%B)
         # Sanitize the commit message for use as a Docker tag
         sanitized_commit_message=$(echo "$commit_message" | tr -d '[:space:]' | tr '[:upper:]' '[:lower:]' | tr -c '[:alnum:]' '-')
-        echo "COMMIT_MESSAGE=$sanitized_commit_message" >> $GITHUB_ENV
+        #echo "COMMIT_MESSAGE=$sanitized_commit_message" >> $GITHUB_ENV
+        echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
 
     - name: Build Docker Image
       run: |
@@ -44,8 +46,7 @@ jobs:
         fi
 
         # Build the Docker image with the commit message as the tag
-        echo $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
-        docker build -t $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }} .
+        docker build -t  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }} .
 
     - name: Tag and Push Docker Image
       run: |
@@ -54,8 +55,8 @@ jobs:
 
         # Tag and push the image
         #docker tag ${{ env.COMMIT_MESSAGE }} $new_image
-        docker push $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
+        docker push ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }}
 
         # Clean up local images
         #docker rmi ${{ env.COMMIT_MESSAGE }}
-        docker rmi $ALIYUN_REGISTRY/$ALIYUN_NAME_SPACE/${{ env.COMMIT_MESSAGE }}
+        docker rmi  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${{ env.COMMIT_MESSAGE }}
