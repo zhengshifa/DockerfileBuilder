@@ -31,7 +31,9 @@ jobs:
       id: get_commit_message
       run: |
         # Fetch the latest commit message from the current branch
-        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        commit_message=$(git log -1 --pretty=%B)
+        # Sanitize the commit message for use as a Docker tag
+        echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
 
     - name: Build Docker Image
       run: |
