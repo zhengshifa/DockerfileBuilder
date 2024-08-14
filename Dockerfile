@@ -1,7 +1,7 @@
 # Version: 2.0.0
 FROM registry.baidubce.com/paddlepaddle/paddle:2.0.0
 
-RUN apt update && sudo apt upgrade -y
+RUN apt update && apt upgrade -y
 # PaddleOCR base on Python3.7
 RUN pip3.7 install --upgrade pip -i https://mirror.baidu.com/pypi/simple
 
