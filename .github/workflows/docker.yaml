@@ -56,9 +56,10 @@ jobs:
         done
 
     - name: executing remote ssh commands to develop
-      uses: Appleboy/SSH-action@v0.1.0
+      uses: sebastianjnuwu/ssh-action-deploy@v3
       with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        username: ${{ secrets.DEPLOY_USER }}
-        key: ${{ secrets.DEPLOY_SECRET }}
-        script: docker pull ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
+        IP: ${{ secrets.DEPLOY_HOST }}
+        USER: ${{ secrets.DEPLOY_USER }}
+        KEY: ${{ secrets.DEPLOY_SECRET }}
+        FOLDER: "/root/.deploy"
+        RUN: "ls -a; pwd"
