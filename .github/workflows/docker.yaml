@@ -63,7 +63,7 @@ jobs:
         KEY: ${{ secrets.DEPLOY_SECRET }}
         RUN: |
           #/bin/bash
-          echo PLATFORMS:$PLATFORMS  /tmp/test.txt
+          echo PLATFORMS:$PLATFORMS >> /tmp/test.txt
           for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
             plat="${PLATFORM#*/}"
             echo PLATFORM:$PLATFORM  >> /tmp/test.txt
