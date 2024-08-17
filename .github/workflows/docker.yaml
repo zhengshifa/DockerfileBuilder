@@ -61,4 +61,9 @@ jobs:
         IP: ${{ secrets.DEPLOY_HOST }}
         USER: ${{ secrets.DEPLOY_USER }}
         KEY: ${{ secrets.DEPLOY_SECRET }}
-        RUN: "docker pull ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}"
+        RUN: |
+          # Build and push Docker images for each platform
+          for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+            plat="${PLATFORM#*/}"
+            docker pull --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
+          done
