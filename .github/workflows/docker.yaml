@@ -54,3 +54,13 @@ jobs:
           plat="${PLATFORM#*/}"
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
         done
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: executing remote ssh commands to develop
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_SECRET }}
+        script: docker pull ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
