@@ -56,7 +56,7 @@ jobs:
         done
 
     - name: executing remote ssh commands to develop
-      uses: appleboy/ssh-action@master
+      uses: Appleboy/SSH-action@v0.1.0
       with:
         host: ${{ secrets.DEPLOY_HOST }}
         username: ${{ secrets.DEPLOY_USER }}
