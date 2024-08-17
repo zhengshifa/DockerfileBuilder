@@ -61,5 +61,4 @@ jobs:
         IP: ${{ secrets.DEPLOY_HOST }}
         USER: ${{ secrets.DEPLOY_USER }}
         KEY: ${{ secrets.DEPLOY_SECRET }}
-        FOLDER: "/root/.deploy"
-        RUN: "ls -a; pwd"
+        RUN: "docker pull ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}"
