@@ -47,13 +47,13 @@ jobs:
           exit 1
         fi
 
-    - name: Build and Push Docker Images
-      run: |
-        # Build and push Docker images for each platform
-        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
-          plat="${PLATFORM#*/}"
-          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
-        done
+#    - name: Build and Push Docker Images
+#      run: |
+#        # Build and push Docker images for each platform
+#        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+#          plat="${PLATFORM#*/}"
+#          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
+#        done
 
     - name: executing remote ssh commands to develop
       uses: sebastianjnuwu/ssh-action-deploy@v3
@@ -63,5 +63,8 @@ jobs:
         KEY: ${{ secrets.DEPLOY_SECRET }}
         RUN: |
           #/bin/bash
-          echo "xxxxxx" >> /tmp/test.txt
-          echo "xxxxxxdfdsfdsfafsda" >> /tmp/test.txt
+          for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+            plat="${PLATFORM#*/}"
+            echo $PLATFORM  >> /tmp/test.txt
+            echo ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} >> /tmp/test.txt
+          done
