@@ -55,7 +55,7 @@ jobs:
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
         done
 
-      name: ssh scp ssh pipelines
+    - name: ssh scp ssh pipelines
       uses: cross-the-world/ssh-scp-ssh-pipelines@latest
       env:
         WELCOME: "ssh scp ssh pipelines"
