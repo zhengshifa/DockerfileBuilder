@@ -55,20 +55,16 @@ jobs:
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
         done
 
-    - name: Rsync Deployer
-      uses: imajeetyadav/rsync-deployer@1.0.0
+    - name: Deploy files via rsync
+      uses: D3rHase/rsync-deploy-action@latest
       with:
         HOST: ${{ secrets.DEPLOY_HOST }}
-        USERNAME: ${{ secrets.DEPLOY_USER }}
-        KEY: ${{ secrets.DEPLOY_SECRET }}
-        SOURCE_PATH: "."
-        TARGET_PATH: "/tmp"
-        BACKUP_PATH: ""
-        PORT: 22
-        RSYNC_PARAMETERS: "" 
-        DELETE_OPTION: "false"
-        EXCLUDE_LIST: ".git, .github"
-        DRY_RUN: "false"
+        PORT: "22"
+        USER: ${{ secrets.DEPLOY_USER }}
+        PRIVATE_SSH_KEY: ${{ secrets.DEPLOY_SECRET }}
+        REPOSITORY_PATH: '*'
+        SERVER_PATH: '/tmp/'
+
 
     - name: Exec cmd on remote server
       uses: Comori/ssh@v0.0.1
