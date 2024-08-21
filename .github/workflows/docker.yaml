@@ -61,8 +61,9 @@ jobs:
         host: ${{ secrets.DEPLOY_HOST }}
         username: ${{ secrets.DEPLOY_USER }}
         privateKey: ${{ secrets.DEPLOY_SECRET }}
+        command: |
+          bash /tmp/deploy.sh"
         sourceFiles: |
           deploy.sh
         targetDir: /tmp/
         scpFirst: true
-        command: "bash /tmp/deploy.sh"
