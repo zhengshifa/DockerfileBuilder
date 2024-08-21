@@ -55,15 +55,20 @@ jobs:
 #          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
 #        done
 
-    - name: executing remote ssh commands to develop
-      uses: sebastianjnuwu/ssh-action-deploy@v3
+    - name: Exec cmd on remote server
+      uses: Comori/ssh@v0.0.1
       with:
-        IP: ${{ secrets.DEPLOY_HOST }}
-        USER: ${{ secrets.DEPLOY_USER }}
-        KEY: ${{ secrets.DEPLOY_SECRET }}
-        RUN: |
-          #/bin/bash
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        privateKey: ${{ secrets.DEPLOY_SECRET }}
+        command: |
           for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
             plat=${PLATFORM#*/}
-            echo "docker pull --platform ${PLATFORM} ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}"| /usr/bin/bash
+            docker pull --platform ${PLATFORM} ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
           done
+    #scp
+    #    sourceFiles: |
+    #      dist.zip
+    #      dist/*
+    #    targetDir: /data
+    #    scpFirst: true
