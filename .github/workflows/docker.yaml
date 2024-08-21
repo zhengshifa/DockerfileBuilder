@@ -62,7 +62,7 @@ jobs:
         username: ${{ secrets.DEPLOY_USER }}
         privateKey: ${{ secrets.DEPLOY_SECRET }}
         command: |
-          bash /tmp/deploy.sh"
+          bash /tmp/deploy.sh
         sourceFiles: |
           deploy.sh
         targetDir: /tmp/
