@@ -47,13 +47,13 @@ jobs:
           exit 1
         fi
 
-#    - name: Build and Push Docker Images
-#      run: |
-#        # Build and push Docker images for each platform
-#        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
-#          plat="${PLATFORM#*/}"
-#          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
-#        done
+    - name: Build and Push Docker Images
+      run: |
+        # Build and push Docker images for each platform
+        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+          plat="${PLATFORM#*/}"
+          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
+        done
 
     - name: Exec cmd on remote server
       uses: Comori/ssh@v0.0.1
@@ -61,14 +61,8 @@ jobs:
         host: ${{ secrets.DEPLOY_HOST }}
         username: ${{ secrets.DEPLOY_USER }}
         privateKey: ${{ secrets.DEPLOY_SECRET }}
-        command: |
-          for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
-            plat=${PLATFORM#*/}
-            docker pull --platform ${PLATFORM} ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
-          done
-    #scp
-    #    sourceFiles: |
-    #      dist.zip
-    #      dist/*
-    #    targetDir: /data
-    #    scpFirst: true
+        sourceFiles: |
+          deploy.sh
+        targetDir: /tmp/
+        scpFirst: true
+        command: "bash /tmp/deploy.sh"
