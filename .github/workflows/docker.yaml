@@ -53,25 +53,28 @@ jobs:
         for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
           plat="${PLATFORM#*/}"
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
-          docker save -o /tmp/${COMMIT_MESSAGE}_${plat}.tar  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
         done
 
-    - name: Deploy files via rsync
-      uses: D3rHase/rsync-deploy-action@latest
+      name: ssh scp ssh pipelines
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      env:
+        WELCOME: "ssh scp ssh pipelines"
+        LASTSSH: "Doing something after copying"
       with:
-        HOST: ${{ secrets.DEPLOY_HOST }}
-        PORT: "22"
-        USER: ${{ secrets.DEPLOY_USER }}
-        PRIVATE_SSH_KEY: ${{ secrets.DEPLOY_SECRET }}
-        REPOSITORY_PATH: '/tmp/*'
-        SERVER_PATH: '/tmp/'
-
-
-    - name: Exec cmd on remote server
-      uses: Comori/ssh@v0.0.1
-      with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        username: ${{ secrets.DEPLOY_USER }}
-        privateKey: ${{ secrets.DEPLOY_SECRET }}
-        command: |
-          ls
+        host: ${{ secrets.DC_HOST }}
+        user: ${{ secrets.DC_USER }}
+        pass: ${{ secrets.DC_PASS }}
+        port: ${{ secrets.DC_PORT }}
+        connect_timeout: 10s
+        first_ssh: |-
+          rm -rf /tmp/*  
+          ls -la 
+          echo $WELCOME
+        scp: |-
+          './*' => /tmp/
+        last_ssh: |-
+          echo $LASTSSH &&
+          ls -la
+          cd /tmp/
+          chmod +x /tmp/deploy.sh
+          sh /tmp/deploy.sh
