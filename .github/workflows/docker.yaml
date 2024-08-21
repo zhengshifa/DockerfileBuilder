@@ -62,8 +62,9 @@ jobs:
         username: ${{ secrets.DEPLOY_USER }}
         privateKey: ${{ secrets.DEPLOY_SECRET }}
         command: |
-          bash /data/deploy.sh
+          chmod +x /data/deploy.sh
+          /tmp/deploy.sh
         sourceFiles: |
           deploy.sh
-        targetDir: /data
-        scpFirst: true
+        targetDir: /tmp
+        scpFirst: true  
