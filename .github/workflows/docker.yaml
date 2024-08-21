@@ -53,6 +53,7 @@ jobs:
         for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
           plat="${PLATFORM#*/}"
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
+          docker save -o /tmp/${COMMIT_MESSAGE}_${plat}.tar  ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat}
         done
 
     - name: Deploy files via rsync
@@ -62,7 +63,7 @@ jobs:
         PORT: "22"
         USER: ${{ secrets.DEPLOY_USER }}
         PRIVATE_SSH_KEY: ${{ secrets.DEPLOY_SECRET }}
-        REPOSITORY_PATH: '*'
+        REPOSITORY_PATH: '/tmp/*'
         SERVER_PATH: '/tmp/'
 
 
@@ -73,5 +74,4 @@ jobs:
         username: ${{ secrets.DEPLOY_USER }}
         privateKey: ${{ secrets.DEPLOY_SECRET }}
         command: |
-          chmod +x /tmp/deploy.sh
-          /tmp/deploy.sh
+          ls
