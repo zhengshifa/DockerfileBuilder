@@ -72,4 +72,4 @@ jobs:
         scp: |-
           './*' => /tmp/
         last_ssh: |-
-          sh /tmp/deploy.sh
+          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}
