@@ -1,4 +1,7 @@
 #!/bin/bash
+PLATFORMS=$1
+COMMIT_MESSAGE=$2
+
 echo PLATFORMS:$PLATFORMS >> /tmp/test.txt
 
 for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
