@@ -72,4 +72,4 @@ jobs:
         scp: |-
           './*' => /tmp/
         last_ssh: |-
-          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}
+          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}   ${ALIYUN_REGISTRY} ${ALIYUN_NAME_SPACE}  ${COMMIT_MESSAGE}
