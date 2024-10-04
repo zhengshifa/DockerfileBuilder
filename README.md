@@ -25,3 +25,7 @@ vi deploy.sh
 # 工作流引用下列uses
 ## ssh scp ssh pipelines
 [cross-the-world/ssh-scp-ssh-pipelines@latest](https://github.com/cross-the-world/ssh-scp-ssh-pipelines)
+
+
+# 用法
+上传/修改Dockerfile文件和配置想要构建的镜像架构,提交到master分支,提交信息为xxx:xxx结构即可自动构建
