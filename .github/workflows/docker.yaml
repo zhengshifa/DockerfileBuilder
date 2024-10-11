@@ -1,0 +1,76 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  ALIYUN_REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
+  ALIYUN_NAME_SPACE: ${{ secrets.ALIYUN_NAME_SPACE }}
+  ALIYUN_REGISTRY_USER: ${{ secrets.ALIYUN_REGISTRY_USER }}
+  ALIYUN_REGISTRY_PASSWORD: ${{ secrets.ALIYUN_REGISTRY_PASSWORD }}
+
+jobs:
+  build:
+    if: contains(github.event.head_commit.message, ':')
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Login to Aliyun Registry
+      run: |
+        docker login -u $ALIYUN_REGISTRY_USER -p $ALIYUN_REGISTRY_PASSWORD $ALIYUN_REGISTRY
+
+    - name: Get Git Commit Message
+      id: get_commit_message
+      run: |
+        # Fetch the latest commit message from the current branch
+        commit_message=$(git log -1 --pretty=%B)
+        # Sanitize the commit message for use as a Docker tag
+        echo "COMMIT_MESSAGE=$commit_message" >> $GITHUB_ENV
+
+    - name: Read Platforms from File
+      id: read_platforms
+      run: |
+        # Read platforms from the 'platforms' file, excluding lines that start with '#'
+        if [ -f platforms ]; then
+          PLATFORMS=$(grep -v '^#' platforms | tr '\n' ',' | sed 's/,$//')
+          echo "PLATFORMS=${PLATFORMS}" >> $GITHUB_ENV
+        else
+          echo "Platform file not found!"
+          exit 1
+        fi
+
+    - name: Build and Push Docker Images
+      run: |
+        # Build and push Docker images for each platform
+        for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
+          plat="${PLATFORM#*/}"
+          docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
+        done
+
+    - name: ssh scp ssh pipelines
+      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      env:
+        WELCOME: "ssh scp ssh pipelines"
+        LASTSSH: "Doing something after copying"
+        PLATFORMS: ${{ env.PLATFORMS }}
+        COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        user: ${{ secrets.DEPLOY_USER }}
+        pass: ${{ secrets.PASS }}
+        connect_timeout: 10s
+        first_ssh: |-
+          rm -rf /tmp/*
+        scp: |-
+          './*' => /tmp/
+        last_ssh: |-
+          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}   ${ALIYUN_REGISTRY} ${ALIYUN_NAME_SPACE}  ${COMMIT_MESSAGE}
