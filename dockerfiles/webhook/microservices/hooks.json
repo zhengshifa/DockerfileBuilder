@@ -1,0 +1,14 @@
+[
+  {
+    "id": "redeploy",
+    "execute-command": "/etc/webhook/redeploy.sh",
+    "command-working-directory": "/etc/webhook",
+    "pass-arguments-to-command":
+    [
+      {
+        "source": "payload",
+        "name": "qq"
+      }
+    ]
+  }
+]

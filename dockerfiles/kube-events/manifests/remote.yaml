@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: zsf-regsecret-chinamobile
+  namespace: default
+data:
+  .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJjaGluYW1vYmlsZS5jb20iOiB7CgkJCSJhdXRoIjogIllXUnRhVzQ2U0dGeVltOXlNVEl6TkRVPSIKCQl9LAoJCSJoYXJib3IuZXhhbXBsZS5jb20iOiB7CgkJCSJhdXRoIjogIllXUnRhVzQ2U0dGeVltOXlNVEl6TkRVPSIKCQl9LAoJCSJoYXJib3IuanpoY3NwdC5vcmciOiB7CgkJCSJhdXRoIjogIllXUnRhVzQ2U0dGeVltOXlNVEl6TkRVPSIKCQl9Cgl9Cn0=
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: gitkube.sh/v1alpha1
+kind: Remote
+metadata:
+  name: kube-events-remote
+  namespace: default
+spec:
+# Provide registry details: https://github.com/hasura/gitkube/blob/master/docs/registry.md
+  registry:
+    url: "chinamobile.com/zsf"
+    credentials:
+      secretRef: zsf-regsecret-chinamobile                # Name of docker-registry secret
+
+# Define deployment rules
+  manifests:
+    helm: {}
+    path: manifests   # k8s deloy yaml files path
+  deployments:
+  - name: kube-events-ai
+    containers: 
+    - name: kube-events-ai-container
+      path: microservices/ 
+      dockerfile: microservices/Dockerfile # dockerfile file
+  authorizedKeys:
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDRJ/JEADhfJwWWX/TdcAWJptrV/YMrCo/EZ/5sTJH+EgziS4FjZ1L54LWSwiusa7i5oTLVJSp12avVZbs00l0wfsk4eccxJBgEPVEcImaQKujHet8z3Xgmn4i9MkXpoqBmS+d0y6U0Qp4pxsGfE6xWeUAzSAaRKbMtT7TyJcmNJg5zMPzYPAhHTjhjdZN/ALD1HXyBvx/4RkVjmBnYEs6Q8mT6OCpMcg96tObj+0fIvnsHMos5DnH0DTDShep+Ad7Yz39KZnO8BPSr5UfPAn7WVSFiRNPiCfPz37UIFMk7d49Bb5G0Hj0gb7p206OBcB4EQUROVm+DtQe+OVncJpoTguxx257KyaUdmTXBaNMP8mgMgu/ARE3RMwTp6FxiyiHrDGJSgQmzwypSKBaXXrp95c4XNmq2WHF99O+hIU52v+XG5cLpJI5yEO7LWG5UUAkZx6WIqiWmOttcjyYwh1lS1q6/C9SSBHHXk3x7whGWpXJ+l4Hlme3P0vUJNrGhaOs= zheng@192.168.10.106"
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDGTCmN5yHMP6o0/FXDQcvWRnksw3Dlfq399QhGDhdV/uyR17ouAu7ZoNXlDemD1MeoLKDUI42XdaeAtXzqIQWocz3NWhl6zjDMxvp19nQEnOupU/r7CVy3Mp36wkW2H7ZXUG8GO4nNo33gGW9FRyohx2dz6UA2Wj9VYWZY4tEsAi1uXiNcWlRHLMW5ab6ZIgkcld+YgEdj+kCz1j0Xoae57K/SKfMOJKvGY+H4uffJDBn8IBcLIg/bEURoSN36de8deBEGB64sR3wsvHxQxrkGD9TAuvQi87oSQGDa/aoeNGhoVzLgqmNbRKc6vhp/wxzTlupN67sYKSGts+Y96RqzCDvfbyaQ+zHrsBfjMRISQGDjQ1DV8Ex5MpHYQYRbUSmB6E2zWKAF5YL8uIsR8/rpX5Dje1WFYPljdnj6uQv3+x8t3Ca6V51cA2/uCLQZ57PCOD+ib8nWMhyJroBb3YIax9byNlvjBTPxhs6sc5L3sYpU1zT4u8nw8s0UmL2BKsc= root@10-248-203-100"
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCs2xO8QWhzDPPr1wtYhXJjkWMfSfakaUhBMwD6zUlS5ldNkI+PFYnHS3/+x1Q1inXIQL2yz1TrsRrj19Zprt8WnBxl49zHuWpGmtl5uIK5KDZ+b/V9+mcGhHw5fpUPMG5C9rwKLpeXomDIqto1hPIp88YfLttrEDeuO0Mz9G9QcB+GSsNIRXoX44vXtV7ZIOJvDU5t7BitYkQuEeLt/2x2OBrw8KU7YchWAEuO5mk0LjwvYNwnNx/Q5LC7v8OlpSlvJpiTz7+zcK0QyiwwV5eIbL2HhrdQ4x701ZVQSZGaqy4HCx8I5HvUfQ7KJJ31DEakE+5tEj3ZjhxVPHC/6939NbNYHHyXizfd+zJGAgPBvv6uZdpwh+ex8gyQ2bo71hKLENPWYS1iiFWX2z6Xr/fafZbqEK38WO/dmtCnl7jSceOsR4N4STNWsEJwpIJLKexuTZK0NbCkprnglAIc4d//drhFb3xM4RAwdUknEsHr0ux0XykQfe3P5OPuld5Z5Ys= Administrator@PC-20230527ASPM"
