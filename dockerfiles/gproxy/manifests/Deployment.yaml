@@ -17,4 +17,4 @@ spec:
           image: {image}
           env:
             - name: GOST_ARGS
-              value: "/usr/bin/gost  -L=tcp://:7890/106.55.28.116:7890 -F=http://10.248.68.185:8118"
+              value: "/usr/bin/gost  -L=tcp://:7890/106.55.28.116:7890 -F=http://xxx.xxx.68.185:8118"

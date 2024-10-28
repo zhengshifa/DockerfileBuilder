@@ -30,5 +30,5 @@ type: kubernetes.io/dockerconfigjson
 git init
 git add .
 git commit -m "add project"
-git remote add sampleremote ssh://default-sampleremote@10.248.205.8:36416/~/git/default-sampleremote
+git remote add sampleremote ssh://default-sampleremote@xxx.xxx.205.8:36416/~/git/default-sampleremote
 git push sampleremote master

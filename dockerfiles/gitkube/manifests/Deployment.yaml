@@ -93,13 +93,13 @@ spec:
           name: gitkube-ci-conf
         env:
         - name: HTTP_PROXY
-          value: http://10.248.68.185:8118
+          value: http://xxx.xxx.68.185:8118
         - name: HTTPS_PROXY
-          value: http://10.248.68.185:8118
+          value: http://xxx.xxx.68.185:8118
         - name: NO_PROXY
           value: kubernetes.default
       hostAliases:
-      - ip: 10.248.203.100
+      - ip: xxx.xxx.203.100
         hostnames:
         - chinamobile.com
       terminationGracePeriodSeconds: 30

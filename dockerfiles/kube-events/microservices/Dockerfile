@@ -4,8 +4,8 @@
 
 FROM python:3-alpine
 
-ARG http_proxy="http://10.248.68.185:8118"
-ARG https_proxy="http://10.248.68.185:8118"
+ARG http_proxy="http://xxx.xxx.68.185:8118"
+ARG https_proxy="http://xxx.xxx.68.185:8118"
 #RUN set -xe \
 #    && apk add --no-cache curl python3 \
 #    && curl -sSL https://bootstrap.pypa.io/get-pip.py | python3
