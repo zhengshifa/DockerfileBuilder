@@ -101,7 +101,7 @@ spec:
       hostAliases:
       - ip: xxx.xxx.203.100
         hostnames:
-        - chinamobile.com
+        - xxx.com
       terminationGracePeriodSeconds: 30
       volumes:
       - hostPath:

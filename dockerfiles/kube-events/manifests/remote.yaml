@@ -15,7 +15,7 @@ metadata:
 spec:
 # Provide registry details: https://github.com/hasura/gitkube/blob/master/docs/registry.md
   registry:
-    url: "chinamobile.com/zsf"
+    url: "xxx.com/zsf"
     credentials:
       secretRef: zsf-regsecret-chinamobile                # Name of docker-registry secret
 
