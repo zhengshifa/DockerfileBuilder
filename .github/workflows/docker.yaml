@@ -57,7 +57,7 @@ jobs:
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
         done
 
-#远程部署
+# 远程部署
 #    - name: ssh scp ssh pipelines
 #      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
 #      env:
