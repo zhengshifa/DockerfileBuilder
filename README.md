@@ -59,7 +59,7 @@ vi deploy.sh
 3. 提交代码：
    ```bash
    git add .
-   git commit -m "nginx:v1"
+   git commit -m "filesystem:v1"
    git push origin master
    ```
 4. 等待构建和部署完成
