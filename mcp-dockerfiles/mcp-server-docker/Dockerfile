@@ -1,5 +1,5 @@
 # 使用官方Python精简镜像作为基础
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -7,9 +7,8 @@ WORKDIR /app
 # 安装系统依赖
 RUN apt-get update && apt-get install -y --no-install-recommends gcc python3-dev
 
-# 复制依赖文件
-COPY pyproject.toml .
-COPY uv.lock .
+# 复制必要文件
+COPY pyproject.toml README.md uv.lock ./
 
 # 创建虚拟环境并安装依赖
 RUN python -m venv /opt/venv
