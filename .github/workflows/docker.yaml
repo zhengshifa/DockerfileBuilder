@@ -56,21 +56,22 @@ jobs:
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
         done
 
-    - name: ssh scp ssh pipelines
-      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-      env:
-        WELCOME: "ssh scp ssh pipelines"
-        LASTSSH: "Doing something after copying"
-        PLATFORMS: ${{ env.PLATFORMS }}
-        COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
-      with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        user: ${{ secrets.DEPLOY_USER }}
-        pass: ${{ secrets.PASS }}
-        connect_timeout: 10s
-        first_ssh: |-
-          rm -rf /tmp/*
-        scp: |-
-          './*' => /tmp/
-        last_ssh: |-
-          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}   ${ALIYUN_REGISTRY} ${ALIYUN_NAME_SPACE}  ${COMMIT_MESSAGE}
+#远程部署
+#    - name: ssh scp ssh pipelines
+#      uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+#      env:
+#        WELCOME: "ssh scp ssh pipelines"
+#        LASTSSH: "Doing something after copying"
+#        PLATFORMS: ${{ env.PLATFORMS }}
+#        COMMIT_MESSAGE: ${{ env.COMMIT_MESSAGE }}
+#      with:
+#        host: ${{ secrets.DEPLOY_HOST }}
+#        user: ${{ secrets.DEPLOY_USER }}
+#        pass: ${{ secrets.PASS }}
+#        connect_timeout: 10s
+#        first_ssh: |-
+#          rm -rf /tmp/*
+#        scp: |-
+#          './*' => /tmp/
+#        last_ssh: |-
+#          sh /tmp/deploy.sh ${PLATFORMS}  ${COMMIT_MESSAGE}   ${ALIYUN_REGISTRY} ${ALIYUN_NAME_SPACE}  ${COMMIT_MESSAGE}
