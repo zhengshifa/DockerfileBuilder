@@ -51,7 +51,7 @@ jobs:
     - name: Build and Push Docker Images
       run: |
         # Build and push Docker images for each platform
-        cd src/time
+        cd src/fetch
         for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
           plat="${PLATFORM#*/}"
           docker buildx build --platform $PLATFORM -t ${ALIYUN_REGISTRY}/${ALIYUN_NAME_SPACE}/${COMMIT_MESSAGE}_${plat} . --push
