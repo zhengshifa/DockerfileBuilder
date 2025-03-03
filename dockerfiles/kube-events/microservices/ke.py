@@ -76,7 +76,7 @@ def send_email(content, recipient_emails):
         server.quit()
         print("邮件发送成功！")
     except Exception as e:
-        print("邮件发送失败：", str(e))
+        print("邮件发送失败:", str(e))
     finally:
         # 关闭会话
         session.close()

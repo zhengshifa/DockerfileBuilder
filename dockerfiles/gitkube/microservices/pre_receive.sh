@@ -214,7 +214,7 @@ do
         # 检查部署是否已存在
         kubectl get deployment/${DEPLOYMENT_NAME} --namespace=$K8S_NS >/dev/null 2>&1
 
-        # 如果部署不存在，则创建部署
+        # 如果部署不存在,则创建部署
         if [ $? -ne 0 ]; then
             echo "====== create new deployment ======"
             sed -i "s@image: {image}@image: $CUR_IMAGE@g" $BUILD_ROOT/$MANIFEST_LOC/*eployment.yaml
@@ -222,7 +222,7 @@ do
             sed -i "s@name: {name}@name: $DEPLOYMENT_NAME@g" $BUILD_ROOT/$MANIFEST_LOC/*eployment.yaml
             kubectl apply -f $BUILD_ROOT/$MANIFEST_LOC/*eployment.yaml
         else
-            # 如果部署已存在，则更新部署的镜像
+            # 如果部署已存在,则更新部署的镜像
             echo "====== update deployment ======"
             kubectl set image --record deployment/${DEPLOYMENT_NAME} ${K8S_DEPL_IMAGE_SET} --namespace=$K8S_NS || exit 1
             # 等待部署更新完成

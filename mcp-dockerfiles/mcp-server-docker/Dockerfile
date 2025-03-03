@@ -16,7 +16,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 RUN pip install --no-cache-dir -U pip setuptools && \
     pip install --no-cache-dir . 
 
-# 第二阶段构建：运行时镜像
+# 第二阶段构建:运行时镜像
 FROM python:3.12-slim
 
 # 设置工作目录和用户
