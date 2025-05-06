@@ -1,0 +1,54 @@
+name: Pull and Save Docker Image
+on:
+  workflow_dispatch:
+    inputs:
+      free_space:
+        description: 'Free disk space before pulling'
+        type: boolean
+        default: false
+      image:
+        description: Docker image name
+        required: true
+        default: 'alpine:latest'
+      arch:
+        type: choice
+        description: Select OS/ARCH
+        options:
+        - linux/amd64
+        - linux/arm64
+        - linux/arm/v7
+        
+jobs:
+  pull_and_upload:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Free Disk Space (Ubuntu)
+      if: ${{ github.event.inputs.free_space == 'true' }}
+      uses: jlumbroso/free-disk-space@main
+      with:
+        # this might remove tools that are actually needed,
+        # if set to "true" but frees about 6 GB
+        tool-cache: false
+
+        # all of these default to true, but feel free to set to
+        # "false" if necessary for your workflow
+        android: true
+        dotnet: true
+        haskell: true
+        large-packages: true
+        docker-images: true
+        swap-storage: true
+
+    - name: Pull Docker Images
+      run: |
+        docker pull "${{ github.event.inputs.image }}" --platform "${{ github.event.inputs.arch }}"
+
+    - name: Upload image
+      uses: ishworkh/container-image-artifact-upload@v2.0.0
+      with:
+        image: "${{ github.event.inputs.image }}"
+        retention_days: "1"
