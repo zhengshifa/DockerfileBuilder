@@ -53,7 +53,7 @@ jobs:
         # Build and push Docker images for each platform
         # 指定项目dockerfile目录
         #cd mcp-dockerfiles/sequentialthinking
-        cd dockerfiles/ag/microservices
+        cd dockerfiles/ai-hedge-fund/docker
 
         for PLATFORM in $(echo $PLATFORMS | tr ',' '\n'); do
           plat="${PLATFORM#*/}"
